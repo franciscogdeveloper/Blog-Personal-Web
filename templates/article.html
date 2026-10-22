@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}{{ article.title }} · Blog personal{% endblock %}
+
+{% block content %}
+  <a class="back" href="{{ url_for('home') }}">← Volver</a>
+  <h1>{{ article.title }}</h1>
+  <p class="date">{{ article.date | long_date }}</p>
+  <div class="content">{{ article.content }}</div>
+{% endblock %}

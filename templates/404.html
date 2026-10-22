@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block title %}Página no encontrada · Blog personal{% endblock %}
+
+{% block content %}
+  <h1>Página no encontrada</h1>
+  <p>La página que buscas no existe.</p>
+  <a class="button" href="{{ url_for('home') }}">Ir al inicio</a>
+{% endblock %}

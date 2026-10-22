@@ -1,0 +1,32 @@
+body { font-family: system-ui, sans-serif; background: #f5f6f8; color: #1f2328; margin: 0; padding: 32px 16px; }
+.card { max-width: 560px; margin: 0 auto; background: #fff; border: 2px solid #1f2328; border-radius: 12px; padding: 24px 28px; }
+h1 { margin: 0 0 20px; font-size: 1.7rem; }
+a { color: inherit; }
+
+/* Listas de artículos */
+.article-list { list-style: none; padding: 0; margin: 0; }
+.article-list li { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 8px 0; }
+.article-list a { text-decoration: none; font-weight: 600; }
+.article-list a:hover { text-decoration: underline; }
+.date { color: #8b95a5; white-space: nowrap; }
+
+/* Artículo */
+.back { display: inline-block; margin-bottom: 12px; color: #4a6cf7; text-decoration: none; }
+.content { white-space: pre-line; line-height: 1.6; }
+
+/* Panel de administración */
+.header { display: flex; justify-content: space-between; align-items: baseline; }
+.add { font-weight: 600; text-decoration: none; }
+.actions { display: flex; gap: 12px; }
+.actions a { font-weight: normal; color: #8b95a5; }
+.actions form { margin: 0; }
+.link { background: none; border: none; padding: 0; font: inherit; color: #8b95a5; cursor: pointer; }
+.link:hover, .actions a:hover { color: #1f2328; text-decoration: underline; }
+.logout { margin-top: 24px; text-align: right; }
+
+/* Formularios */
+label { display: block; margin: 16px 0 6px; font-weight: 600; }
+input, textarea { width: 100%; box-sizing: border-box; padding: 8px; font: inherit; border: 2px solid #1f2328; border-radius: 6px; }
+.button { display: inline-block; margin-top: 20px; padding: 10px 28px; font: inherit; background: #fff; color: #1f2328; border: 2px solid #1f2328; border-radius: 6px; cursor: pointer; text-decoration: none; }
+.cancel { margin-left: 16px; color: #8b95a5; }
+.error { color: #b42318; background: #fef3f2; padding: 8px 12px; border-radius: 6px; }
