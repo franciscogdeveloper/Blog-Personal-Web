@@ -8,3 +8,6 @@ __pycache__/
 # Datos locales: los artículos del blog
 articles/
 *.tmp
+
+# Secretos
+.env.sh
