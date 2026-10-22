@@ -82,3 +82,19 @@ class ArticleStore:
         }
         self._save(article)
         return article
+
+    # Reemplaza los datos de un artículo existente y lo devuelve
+    def update(self, article_id, title, published, content):
+        if self.get(article_id) is None:
+            raise ArticleError(f"No existe un artículo con ID {article_id}.")
+        title, published, content = validate(title, published, content)
+        article = {"id": article_id, "title": title, "date": published, "content": content}
+        self._save(article)
+        return article
+
+    # Elimina el archivo de un artículo
+    def delete(self, article_id):
+        path = self._path(article_id)
+        if not path.exists():
+            raise ArticleError(f"No existe un artículo con ID {article_id}.")
+        path.unlink()
