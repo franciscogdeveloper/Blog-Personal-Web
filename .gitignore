@@ -1,0 +1,10 @@
+# Entorno virtual
+.venv/
+
+# Archivos generados por Python
+__pycache__/
+*.pyc
+
+# Datos locales: los artículos del blog
+articles/
+*.tmp
