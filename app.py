@@ -6,7 +6,7 @@ from pathlib import Path
 from flask import Flask, abort, redirect, render_template, request, session, url_for
 
 import auth
-from articles import ArticleStore
+from articles import ArticleError, ArticleStore
 
 # Nombres de los meses para mostrar las fechas en español
 MONTHS = [
@@ -29,6 +29,11 @@ def csrf_token():
     if "csrf_token" not in session:
         session["csrf_token"] = secrets.token_urlsafe(32)
     return session["csrf_token"]
+
+
+# Formulario compartido por "nuevo" y "editar"; conserva lo ingresado si hay error
+def render_article_form(heading, values, error=None):
+    return render_template("article_form.html", heading=heading, values=values, error=error)
 
 
 def create_app(config=None):
@@ -81,9 +86,43 @@ def create_app(config=None):
             abort(404)
         return render_template("article.html", article=found)
 
-    @app.errorhandler(404)
-    def not_found(error):
-        return render_template("404.html"), 404
+    @app.route("/new", methods=["GET", "POST"])
+    @auth.login_required
+    def new_article():
+        if request.method == "POST":
+            form = request.form
+            try:
+                store.create(form.get("title", ""), form.get("date", ""), form.get("content", ""))
+            except ArticleError as error:
+                return render_article_form("Nuevo artículo", form, error), 400
+            return redirect(url_for("admin"))
+        # Formulario vacío con la fecha de hoy sugerida
+        return render_article_form("Nuevo artículo", {"date": date.today().isoformat()})
+
+    @app.route("/edit/<int:article_id>", methods=["GET", "POST"])
+    @auth.login_required
+    def edit_article(article_id):
+        found = store.get(article_id)
+        if found is None:
+            abort(404)
+        if request.method == "POST":
+            form = request.form
+            try:
+                store.update(article_id, form.get("title", ""), form.get("date", ""), form.get("content", ""))
+            except ArticleError as error:
+                return render_article_form("Editar artículo", form, error), 400
+            return redirect(url_for("admin"))
+        # Formulario con los datos actuales del artículo
+        return render_article_form("Editar artículo", found)
+
+    @app.route("/delete/<int:article_id>", methods=["POST"])
+    @auth.login_required
+    def delete_article(article_id):
+        try:
+            store.delete(article_id)
+        except ArticleError:
+            abort(404)
+        return redirect(url_for("admin"))
 
     @app.route("/login", methods=["GET", "POST"])
     def login():
@@ -108,4 +147,8 @@ def create_app(config=None):
     def admin():
         return render_template("admin.html", articles=store.list_all())
 
+    @app.errorhandler(404)
+    def not_found(error):
+        return render_template("404.html"), 404
+    
     return app
